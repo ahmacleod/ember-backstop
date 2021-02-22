@@ -134,7 +134,11 @@ function backstopHelper(name, testHash, options, res, err) {
 
   // Hoist the testing container contents up to the body.
   // We need to use the original DOM to keep the head stylesheet around.
-  const content = getDoctype() + domCopy.outerHTML;
+  let content = getDoctype() + domCopy.outerHTML;
+
+  content = content.replace(/(<(pre|script|style|textarea)[^]+?<\/\2)|(^|>)\s+|\s+(?=<|$)/g, "$1$3");
+
+
   const payload = JSON.stringify({
     content,
     name: name,
