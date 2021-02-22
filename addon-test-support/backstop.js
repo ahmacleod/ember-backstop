@@ -123,11 +123,17 @@ function backstopHelper(name, testHash, options, res, err) {
 
   prepareInputValuesForCopying(snapshotRoot);
 
-  let snapshotHtml = snapshotRoot.innerHTML;
+  // clear out the copy's elements
+  Array.from(bodyCopy.children).forEach(child => child.remove());
+
+  // clone everything inside body
+  Array.from(testingContainer.children).forEach(child => {
+    let clonedChild = child.cloneNode(true);
+    bodyCopy.appendChild(clonedChild);
+  });
 
   // Hoist the testing container contents up to the body.
   // We need to use the original DOM to keep the head stylesheet around.
-  bodyCopy.innerHTML = snapshotHtml;
   const content = getDoctype() + domCopy.outerHTML;
   const payload = JSON.stringify({
     content,
